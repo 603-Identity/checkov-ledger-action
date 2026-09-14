@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.checkov.baseline
+# Never a checkov config file at the root -- the action refuses to run with one present.
+.checkov.yaml
+.checkov.yml

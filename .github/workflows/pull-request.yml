@@ -1,0 +1,48 @@
+name: PR Validation
+
+# `push: main` as well as `pull_request`: a squash-merge mints a commit no PR run
+# evaluated, so main itself is validated after every merge (the same reasoning as
+# terraform-cloudflare-dns's IAC-BL-23). Nothing here is expected red, so a push
+# trigger cannot leave main's badge permanently red -- that is the whole point of
+# this repo (infrastructure-core IAC-D47).
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    name: Secret scan (detect-secrets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # THE VERSION TRAP (infrastructure-core IAC-BL-101): `detect-secrets` on a
+      # developer PATH is usually bc-detect-secrets, Bridgecrew's fork, installed
+      # transitively by checkov. Fork and upstream REJECT each other's baseline
+      # files. Pinned explicitly so a checkov bump can never move this version out
+      # from under .secrets.baseline.
+      - name: Install detect-secrets
+        run: pip install bc-detect-secrets==1.5.47
+
+      # SAME MECHANISM AS the pre-commit hook, against the SAME baseline -- not a
+      # second, weaker copy. `git ls-files -z` scopes this to tracked files only.
+      # PR-time, not push-time: a secret this catches has already reached GitHub
+      # and must be rotated, not just removed. GitHub's own secret scanning +
+      # push protection (enabled on this public repo) is the push-time half.
+      - name: Scan tracked files against the secrets baseline
+        run: git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline
+
+  # `test` (python3 test_checkov_ledger.py, asserting a non-zero number of tests
+  # ran) is added by the PR that lands the code (Sprint 15 T5) and becomes a
+  # required check AFTER that PR merges -- a ruleset context that no job can
+  # report parks every PR at "Expected" forever (IAC-D14).
