@@ -1,0 +1,60 @@
+name: 'Checkov Ledger'
+description: >-
+  Run Checkov and compare its output against a reviewed ledger of accepted
+  findings, sanctioned skips, and directory coverage. Green iff the scan
+  matches the ledger exactly -- no drift in either direction. See
+  checkov_ledger.py's module docstring for the full rationale (Sprint 15,
+  IAC-D47).
+
+inputs:
+  directory:
+    description: >-
+      Directory to scan with Checkov (checkov -d). Must resolve to the
+      workspace root -- run() refuses anything else, since coverage and
+      ledger paths are both repo-root-relative while Checkov's own
+      file_paths are relative to this value; they only agree when it is the
+      root. Leave at the default.
+    required: false
+    default: '.'
+  framework:
+    description: 'Checkov --framework value.'
+    required: false
+    default: 'terraform'
+  ledger:
+    description: 'Path to the ledger JSON file, relative to the workspace.'
+    required: false
+    default: 'checkov-ledger.json'
+
+runs:
+  using: 'composite'
+  steps:
+    # The ledger is the single source of the Checkov version (decision 6) --
+    # there is no version input above and no default pinned in this file.
+    # Inputs reach the shell only through `env:`, never interpolated
+    # directly into a `run:` body -- an input wired from event data (a
+    # future public-repo consumer, decision 8 Phase 2) must not land inside
+    # a shell string or a nested Python string literal unescaped.
+    - name: Install Checkov (pinned by the ledger)
+      shell: bash
+      env:
+        LEDGER: ${{ inputs.ledger }}
+      run: |
+        checkov_version="$(python3 -c "import json, os; print(json.load(open(os.environ['LEDGER']))['checkov_version'])")"
+        echo "Installing checkov==$checkov_version (pinned by $LEDGER)"
+        pip install "checkov==$checkov_version"
+
+    # The Python entrypoint does the scan, the crash guard, and the
+    # evaluation -- this is a thin wrapper (decision 8): no other step, no
+    # other exit. `github.action_path` is trusted action metadata, not an
+    # input, so it is interpolated directly as everywhere else in this repo.
+    - name: Run the ledger-compared Checkov scan
+      shell: bash
+      env:
+        DIRECTORY: ${{ inputs.directory }}
+        FRAMEWORK: ${{ inputs.framework }}
+        LEDGER: ${{ inputs.ledger }}
+      run: |
+        python3 "${{ github.action_path }}/checkov_ledger.py" run \
+          --directory "$DIRECTORY" \
+          --framework "$FRAMEWORK" \
+          --ledger "$LEDGER"
