@@ -17,7 +17,7 @@ directory producing results, a producing directory gone silent, a `.tf`
 directory in neither set, a changed `suppress_comment`, a group past
 `review_by`, and `validate`'s own schema/cross-reference checks.
 
-Usage: python3 .github/actions/checkov-ledger/test_checkov_ledger.py
+Usage: python3 test_checkov_ledger.py  (from this repo's root)
 """
 
 from __future__ import annotations
@@ -31,7 +31,11 @@ import sys
 import tempfile
 
 HERE = pathlib.Path(__file__).resolve().parent
-REPO = HERE.parent.parent.parent
+# This repo IS the action (root action.yml), so there is no consuming repo above
+# it. Case 28 validates the committed example ledger in examples/ instead of a
+# consumer's real one; a consumer's own gates run `validate` against theirs.
+REPO = HERE
+EXAMPLES = HERE / "examples"
 SCRIPT = HERE / "checkov_ledger.py"
 
 sys.path.insert(0, str(HERE))
@@ -1110,16 +1114,18 @@ def main() -> int:
             cwd=fixture_root,
         )
 
-        # 28. VALIDATE -- THIS REPO'S OWN real ledger, against the real
-        #     repo root. Living proof that T2's ledger is self-consistent --
-        #     the current test 11, generalized.
+        # 28. VALIDATE -- the committed example ledger in examples/, against
+        #     the example config beside it (the README's worked example).
+        #     In the consuming repo this case validated that repo's own real
+        #     ledger; here the example is the ledger this repo can vouch for,
+        #     and it keeps the README's schema honest by execution.
         check(
-            "VALIDATE (this repo's own checkov-ledger.json)",
+            "VALIDATE (examples/checkov-ledger.json, the README's worked example)",
             ["validate", "--ledger", "checkov-ledger.json"],
             "",
             0,
-            must_contain=("OK: ledger validated",),
-            cwd=REPO,
+            must_contain=("OK: ledger validated -- 1 failure group(s), 1 skip group(s), 1 known-invisible director",),
+            cwd=EXAMPLES,
         )
 
         # --- `validate`'s address-shape dispatch (decision 13, Amendment 2) -

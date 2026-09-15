@@ -1,0 +1,36 @@
+{
+  "checkov_version": "3.3.8",
+  "failures": [
+    {
+      "check_id": "CKV_AWS_18",
+      "reason": "Real finding: this state bucket has no access logging yet.",
+      "tracking": "https://github.com/603-Identity/example-consumer/issues/1",
+      "review_by": "2099-01-01",
+      "resources": [
+        { "resource": "aws_s3_bucket.state", "file_path": "/main.tf" }
+      ]
+    }
+  ],
+  "skips": [
+    {
+      "check_id": "CKV_AWS_109",
+      "tracking": "https://github.com/603-Identity/example-consumer/issues/2",
+      "review_by": "2099-01-01",
+      "resources": [
+        {
+          "resource": "aws_iam_policy_document.kms",
+          "file_path": "/main.tf",
+          "suppress_comment": " key's own resource-based policy; \"*\" means \"this key\""
+        }
+      ]
+    }
+  ],
+  "known_invisible": [
+    {
+      "directory": "github-only",
+      "reason": "GitHub-provider resources; Checkov ships no policies for the github provider.",
+      "tracking": "https://github.com/603-Identity/example-consumer/issues/3",
+      "review_by": "2099-01-01"
+    }
+  ]
+}

@@ -42,7 +42,33 @@ jobs:
       - name: Scan tracked files against the secrets baseline
         run: git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline
 
-  # `test` (python3 test_checkov_ledger.py, asserting a non-zero number of tests
-  # ran) is added by the PR that lands the code (Sprint 15 T5) and becomes a
-  # required check AFTER that PR merges -- a ruleset context that no job can
-  # report parks every PR at "Expected" forever (IAC-D14).
+  # The evaluator's own falsification suite. Stdlib-only, no live Checkov, no
+  # cloud credentials: it drives fixture JSON through `evaluate`, exercises
+  # `validate` and `run`'s guards against synthetic repos it builds itself,
+  # and runs `run` end-to-end against a stub `checkov` on PATH. The suite
+  # pins its own case count (EXPECTED_CHECK_COUNT) and this job additionally
+  # refuses a green that reports zero checks, so a suite that silently
+  # collected nothing cannot pass.
+  #
+  # This job is added to the ruleset (`main-required-checks`) only after the
+  # first merge to `main` that carries it, never before it can report -- a
+  # ruleset context that no job reports parks every PR at "Expected" forever
+  # (infrastructure-core IAC-D14).
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Run the evaluator's falsification suite
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python3 --version
+          out="$(python3 test_checkov_ledger.py 2>&1)" || { printf '%s\n' "$out"; exit 1; }
+          printf '%s\n' "$out"
+          grep -qE '^OK: checkov_ledger\.py falsified -- [1-9][0-9]* checks all behaved\.$' <<<"$out"
