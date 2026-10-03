@@ -8,9 +8,13 @@ and are cited from there, not restated here.
 
 ## Status
 
-Released: **v0.1.1** (see `CHANGELOG.md`). The evaluator, `action.yml` and the test
-suite were extracted from infrastructure-core in its Sprint 15, Phase 2. No sprint has
-been planned in this repo yet.
+Released: **v0.1.2** (see `CHANGELOG.md`). The evaluator, `action.yml` and the test
+suite were extracted from infrastructure-core in its Sprint 15, Phase 2.
+
+Sprint 1 (milestone #1, "test hermeticity and dependency bump") is done: Checkov 3.3.22 /
+bc-detect-secrets 1.5.52 (PR #9) and hermetic gpgsign fixture commits (PR #11), released as
+v0.1.2 (PR #13). Hermetically verified only (suite run in WSL); the live smoke run of the
+action is deferred and tracked in #14.
 
 ## Decisions
 
