@@ -1,0 +1,26 @@
+{
+  "extraKnownMarketplaces": {
+    "claude-workbench": {
+      "source": {
+        "source": "github",
+        "repo": "glunk-works/claude-workbench",
+        "ref": "v0.15.0"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "way-of-working@claude-workbench": true
+  },
+  "permissions": {
+    "deny": [
+      "Bash(gh pr merge:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git push -f:*)",
+      "PowerShell(gh pr merge:*)",
+      "PowerShell(git push --force:*)",
+      "PowerShell(git push --force-with-lease:*)",
+      "PowerShell(git push -f:*)"
+    ]
+  }
+}

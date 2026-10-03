@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "current_phase": "Sprint 1 planning. The repo just adopted the way-of-working plugin with sprints as GitHub milestones; no milestone has been picked yet.",
+  "current_sprint_id": "1",
+  "sprint_status": "planning",
+  "assigned_model": "opus",
+  "assigned_persona": "architect",
+  "last_commit": "129931f",
+  "next_action": "Plan Sprint 1: pick which open issues it covers and which GitHub milestone holds it. /way-of-working:plan-sprint can help triage the open issues into milestones; choosing the Sprint 1 milestone stays the owner's call, recorded by /way-of-working:handoff.",
+  "hitl_gate": "NONE OPEN. Next gate: owner picks the Sprint 1 milestone.",
+  "pointers": {
+    "roadmap": "docs/roadmap.md",
+    "sprint_plan": null,
+    "plan_anchor": null
+  }
+}
