@@ -1,0 +1,78 @@
+# way-of-working plugin contract for this repo.
+# See: reference/project-schema.md in the way-of-working plugin for the full key reference.
+
+# ── identity ─────────────────────────────────────────────────────────────────
+repo: 603-Identity/checkov-ledger-action
+pr_base: main
+migration_base: null
+
+# ── the deep record ──────────────────────────────────────────────────────────
+# One small doc holds the roadmap, the decisions log and the threat model. The
+# action's origin story (IAC-D47, Sprint 15) stays in infrastructure-core and is
+# cited from there, not copied here.
+roadmap: docs/roadmap.md
+sprints_dir: sprints               # declared but unused: planning is github_milestones.
+threat_model: docs/roadmap.md
+
+planning:
+  kind: github_milestones          # one sprint = one milestone in this repo; the
+                                   # milestone's issues are the task list.
+
+decisions:
+  log: docs/roadmap.md
+  prefix: CLA-D
+
+backlog:
+  kind: github_issues              # required by planning.kind: github_milestones.
+  repo: null                       # this repo: issues and milestones live here.
+  path: null
+  item_prefix: null
+
+load_bearing_docs:
+  - README.md
+  - CHANGELOG.md
+  - docs/roadmap.md
+  - .ai/next-steps.md
+
+# ── what counts as a behavior change ─────────────────────────────────────────
+# examples/ is code here: test case 28 validates examples/checkov-ledger.json
+# against examples/main.tf.
+code_paths:
+  - action.yml
+  - checkov_ledger.py
+  - test_checkov_ledger.py
+  - examples/
+  - .github/workflows/
+  - .github/dependabot.yml
+  - .pre-commit-config.yaml
+  - .secrets.baseline
+
+# ── the local green gate ─────────────────────────────────────────────────────
+# Mirrors the two CI jobs in .github/workflows/pull-request.yml. Needs a POSIX
+# host (WSL, a container, CI): the suite puts a stub `checkov` on PATH, which
+# native Windows does not resolve. commit.gpgsign is forced off for the suite's
+# own fixture commits until #3 is fixed, or it blocks on pinentry.
+gates:
+  green:
+    - { run: "git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline" }
+    - { run: "GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=commit.gpgsign GIT_CONFIG_VALUE_0=false PYTHONDONTWRITEBYTECODE=1 python3 test_checkov_ledger.py" }
+
+# ── branch protection ────────────────────────────────────────────────────────
+# Matches the live ruleset (id 23308930). It carries no deletion or
+# non_fast_forward rule; listed as it is, not as it should be.
+ruleset:
+  name: main-required-checks
+  rule_types: [pull_request, required_status_checks]
+  required_checks: ["Secret scan (detect-secrets)", test]
+
+# ── the fresh-session review gate ────────────────────────────────────────────
+review:
+  ci_gate: null                    # this repo has no review CI gate.
+
+# ── agents ───────────────────────────────────────────────────────────────────
+agents:
+  enabled: [architect, coder, security-critic, docs-consistency]
+models:
+  architect: opus
+  coder: sonnet
+  second_opinion: null
