@@ -4,7 +4,7 @@ Tags are annotated, signed, and placed only on `main`'s first-parent line: consu
 pin helpers verify that the pinned SHA was `main`'s tip at some point and that the
 `# vX.Y.Z` label's tag names it (infrastructure-core `scripts/checkov_ledger_action_pin.py`).
 
-## Unreleased (v0.1.2)
+## v0.1.2 -- 2026-10-02
 
 Dependency bump and a test-suite fix; no change to the evaluator's behaviour or to
 `action.yml`.
