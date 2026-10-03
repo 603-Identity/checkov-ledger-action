@@ -6,3 +6,6 @@ __pycache__/
 # Never a checkov config file at the root -- the action refuses to run with one present.
 .checkov.yaml
 .checkov.yml
+
+# way-of-working machine cursor: rewritten every session, never committed
+.ai/state.json
