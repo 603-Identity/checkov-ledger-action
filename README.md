@@ -126,6 +126,13 @@ What it does not do is documented at the top of `checkov_ledger.py` ("WHAT THIS 
 DO"), including the module-instance collapse (infrastructure-core#491) and the regex-based,
 not parse-tree-based, cross-checks in `validate`.
 
+## Threat model
+
+See [`docs/threat_model.md`](docs/threat_model.md) — this action's untrusted inputs,
+dangerous sinks, credential holders, the boundaries a reviewer should hold a diff to, and its
+accepted gaps. Kept as its own file, not a section here, so `security-critic` (and any other
+reviewer) never has to extract a scannable list from usage prose first.
+
 ## Development
 
 Stdlib-only Python; no dependencies beyond Checkov itself, and the tests need none at all:

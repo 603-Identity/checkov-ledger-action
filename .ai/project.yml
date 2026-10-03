@@ -7,12 +7,12 @@ pr_base: main
 migration_base: null
 
 # ── the deep record ──────────────────────────────────────────────────────────
-# One small doc holds the roadmap, the decisions log and the threat model. The
-# action's origin story (IAC-D47, Sprint 15) stays in infrastructure-core and is
-# cited from there, not copied here.
+# docs/roadmap.md holds the roadmap and the decisions log. The action's origin
+# story (IAC-D47, Sprint 15) stays in infrastructure-core and is cited from
+# there, not copied here.
 roadmap: docs/roadmap.md
 sprints_dir: sprints               # declared but unused: planning is github_milestones.
-threat_model: docs/roadmap.md
+threat_model: docs/threat_model.md
 
 planning:
   kind: github_milestones          # one sprint = one milestone in this repo; the
@@ -32,6 +32,7 @@ load_bearing_docs:
   - README.md
   - CHANGELOG.md
   - docs/roadmap.md
+  - docs/threat_model.md
   - .ai/next-steps.md
 
 # ── what counts as a behavior change ─────────────────────────────────────────
