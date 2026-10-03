@@ -1,6 +1,6 @@
 repos:
   # `repo: local` + `language: system` on purpose: the system binary is
-  # bc-detect-secrets 1.5.47 (Bridgecrew's fork, the one checkov pins), and the
+  # bc-detect-secrets 1.5.52 (Bridgecrew's fork, the one checkov pins), and the
   # fork and Yelp's upstream reject each other's baselines. This keeps the hook,
   # the CI job and the baseline on one version. See .github/workflows/pull-request.yml.
   - repo: local

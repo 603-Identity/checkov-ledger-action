@@ -32,7 +32,7 @@ jobs:
       # files. Pinned explicitly so a checkov bump can never move this version out
       # from under .secrets.baseline.
       - name: Install detect-secrets
-        run: pip install bc-detect-secrets==1.5.47
+        run: pip install bc-detect-secrets==1.5.52
 
       # SAME MECHANISM AS the pre-commit hook, against the SAME baseline -- not a
       # second, weaker copy. `git ls-files -z` scopes this to tracked files only.

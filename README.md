@@ -59,7 +59,7 @@ case 28 validates it against `examples/main.tf`, so it cannot go stale).
 
 ```json
 {
-  "checkov_version": "3.3.8",
+  "checkov_version": "3.3.22",
   "failures": [
     { "check_id": "CKV_AWS_18",
       "reason": "one sentence",
@@ -119,7 +119,7 @@ Rules the evaluator enforces, in one place:
   Past `review_by` is red: re-review and re-date in a reviewed PR, or fix.
 - **The Checkov version is pinned by the ledger.** `run` compares `checkov --version`'s own
   output to `checkov_version`; a mismatch is red whatever the scan found.
-- Both of Checkov 3.3.8's JSON shapes are handled: the nested `summary`/`results` shape and
+- Both of Checkov 3.3.22's JSON shapes are handled: the nested `summary`/`results` shape and
   the flat shape it emits when nothing at all was evaluated.
 
 What it does not do is documented at the top of `checkov_ledger.py` ("WHAT THIS DOES NOT

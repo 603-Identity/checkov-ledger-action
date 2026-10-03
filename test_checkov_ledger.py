@@ -47,7 +47,7 @@ ORG = ledger_module.ORG
 # cases below. `dirA` carries the one accepted failure, `dirB` the one
 # accepted skip, `dirC` is known-invisible.
 SMALL_LEDGER = {
-    "checkov_version": "3.3.8",
+    "checkov_version": "3.3.22",
     "failures": [
         {
             "check_id": "CKV_AWS_18",
@@ -186,7 +186,7 @@ def main() -> int:
     def evaluate_argv(
         ledger_path: pathlib.Path,
         tracked_dirs: list,
-        checkov_version: str = "3.3.8",
+        checkov_version: str = "3.3.22",
         today: str | None = None,
         tracked_files: list = (),
     ) -> list[str]:
@@ -556,7 +556,7 @@ def main() -> int:
         #     nothing at all is evaluated), with an empty repo whose only
         #     tracked directory is its own root, known-invisible.
         flat_ledger = {
-            "checkov_version": "3.3.8",
+            "checkov_version": "3.3.22",
             "failures": [],
             "skips": [],
             "known_invisible": [
@@ -678,7 +678,7 @@ def main() -> int:
         #      CLI contract a real caller could get wrong.
         check(
             "EVALUATE (tracked_dirs non-empty, tracked_files omitted -- fails loudly, not vacuously green)",
-            ["evaluate", "--ledger", str(ledger_path), "--checkov-version", "3.3.8",
+            ["evaluate", "--ledger", str(ledger_path), "--checkov-version", "3.3.22",
              *[x for d in TRACKED_DIRS for x in ("--tracked-dir", d)]],
             json.dumps(_baseline_checkov_data()),
             1,
@@ -692,7 +692,7 @@ def main() -> int:
         #      opaque-file one.
         check(
             "EVALUATE (tracked_files non-empty, tracked_dirs omitted -- fails loudly, not vacuously green)",
-            ["evaluate", "--ledger", str(ledger_path), "--checkov-version", "3.3.8",
+            ["evaluate", "--ledger", str(ledger_path), "--checkov-version", "3.3.22",
              "--tracked-file", "dirA/main.tf"],
             json.dumps(_baseline_checkov_data()),
             1,
@@ -706,7 +706,7 @@ def main() -> int:
         #      closed.
         check(
             "EVALUATE (both tracked_dirs and tracked_files omitted -- fails loudly, not vacuously green)",
-            ["evaluate", "--ledger", str(ledger_path), "--checkov-version", "3.3.8"],
+            ["evaluate", "--ledger", str(ledger_path), "--checkov-version", "3.3.22"],
             json.dumps(_baseline_checkov_data()),
             1,
             must_contain=("tracked_dirs and tracked_files are both empty",),
@@ -786,7 +786,7 @@ def main() -> int:
         #       cross-check was narrow -- so this locks in that the widened
         #       `validate` didn't accidentally narrow `evaluate` too.
         provider_dotless_ledger = {
-            "checkov_version": "3.3.8",
+            "checkov_version": "3.3.22",
             "failures": [
                 {
                     "check_id": "CKV_AWS_41",
@@ -1159,7 +1159,7 @@ def main() -> int:
 
         def _shape_ledger(resource: str, file_path: str, check_id: str = "CKV_TEST_1") -> dict:
             return {
-                "checkov_version": "3.3.8",
+                "checkov_version": "3.3.22",
                 "failures": [
                     {
                         "check_id": check_id,
@@ -1238,8 +1238,9 @@ def main() -> int:
         )
 
         # 28f2. SHAPE (indexed count/for_each address) -- REJECT explicitly,
-        #       naming the shape, for all three renderings Checkov 3.3.8
-        #       emits (fresh-session review, PR #493). Before this branch
+        #       naming the shape, for all three renderings Checkov
+        #       emits (3.3.8: fresh-session review, PR #493; re-checked
+        #       on 3.3.22). Before this branch
         #       existed the first and third fell through to a message
         #       blaming a typo/rename; the second, whose for_each key
         #       contains a dot, to "not a recognized address shape".
@@ -1529,7 +1530,7 @@ def main() -> int:
             check=True,
         )
         badenc_ledger = {
-            "checkov_version": "3.3.8",
+            "checkov_version": "3.3.22",
             "failures": [
                 {
                     "check_id": "CKV_TEST_1",
@@ -1619,7 +1620,7 @@ def main() -> int:
             "#!/usr/bin/env python3\n"
             "import os, sys\n"
             "if '--version' in sys.argv:\n"
-            "    print(os.environ.get('STUB_CHECKOV_VERSION', '3.3.8'))\n"
+            "    print(os.environ.get('STUB_CHECKOV_VERSION', '3.3.22'))\n"
             "    sys.exit(0)\n"
             "mode = os.environ.get('STUB_CHECKOV_SCAN_MODE', 'ok')\n"
             "if mode == 'crash':\n"
@@ -1666,7 +1667,7 @@ def main() -> int:
             2,
             must_contain=("a crash, not just",),
             cwd=stub_repo,
-            env=_stub_env(STUB_CHECKOV_VERSION="3.3.8", STUB_CHECKOV_SCAN_MODE="crash"),
+            env=_stub_env(STUB_CHECKOV_VERSION="3.3.22", STUB_CHECKOV_SCAN_MODE="crash"),
         )
 
         # 37. RUN end-to-end (stub checkov) -- bad JSON: checkov exits clean
@@ -1678,7 +1679,7 @@ def main() -> int:
             1,
             must_contain=("Could not parse Checkov output as JSON",),
             cwd=stub_repo,
-            env=_stub_env(STUB_CHECKOV_VERSION="3.3.8", STUB_CHECKOV_SCAN_MODE="badjson"),
+            env=_stub_env(STUB_CHECKOV_VERSION="3.3.22", STUB_CHECKOV_SCAN_MODE="badjson"),
         )
 
         # 38. RUN end-to-end (stub checkov) -- full match: exit 0, AND
@@ -1693,7 +1694,7 @@ def main() -> int:
             must_contain=("Checkov evaluated:",),
             cwd=stub_repo,
             env=_stub_env(
-                STUB_CHECKOV_VERSION="3.3.8",
+                STUB_CHECKOV_VERSION="3.3.22",
                 STUB_CHECKOV_SCAN_MODE="ok",
                 STUB_CHECKOV_JSON=matching_json,
                 GITHUB_STEP_SUMMARY=str(step_summary_path),

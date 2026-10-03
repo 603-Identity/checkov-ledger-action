@@ -1,5 +1,5 @@
 {
-  "checkov_version": "3.3.8",
+  "checkov_version": "3.3.22",
   "failures": [
     {
       "check_id": "CKV_AWS_18",
