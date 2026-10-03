@@ -55,7 +55,7 @@ WHAT IS PINNED, resource-scoped (`checkov-ledger.json`'s schema)
   one. A group whose date has passed is red ("stale acceptance: re-review or
   fix"), whether or not anything else drifted.
 
-Both of Checkov 3.3.8's JSON shapes are handled: the normal
+Both of Checkov 3.3.22's JSON shapes are handled: the normal
 `{summary: {...}, results: {...}}` shape, and the ALL-FLAT shape it emits
 when nothing is evaluated at all (`resource_count: 0` -- e.g.
 `terraform-cloudflare-dns`, whose one resource type Checkov has no policies
@@ -210,8 +210,9 @@ WHAT THIS DOES NOT DO
   addresses** (`module.a.module.b.<type>.<name>`) and **indexed
   `count`/`for_each` addresses** (`<type>.<name>[0]`,
   `<type>.<name>["key"]`, `module.<block>[0].<type>.<name>` -- Checkov 3.3.8
-  emits all three, verified on a fixture by the fresh-session review of PR
-  `#493`; this repo has no `count`/`for_each` in any tracked file, but both
+  emitted all three, verified on a fixture by the fresh-session review of PR
+  `#493`, and 3.3.22 still does (re-checked for
+  checkov-ledger-action#6); this repo has no `count`/`for_each` in any tracked file, but both
   Phase 2 consumer repos use `for_each`, so the shape WILL reach a
   consumer's ledger). No consumer in this sprint has either; widen
   `validate` when one appears, not before. A finding on either shape goes
@@ -259,7 +260,7 @@ WHAT THIS DOES NOT DO
 
 Usage:
   checkov -d . --framework terraform --output json | \\
-      python3 checkov_ledger.py evaluate --checkov-version 3.3.8 \\
+      python3 checkov_ledger.py evaluate --checkov-version 3.3.22 \\
           --tracked-dir bootstrap --tracked-dir tenants/603identity/github ...
   python3 checkov_ledger.py validate --ledger checkov-ledger.json
   python3 checkov_ledger.py run --ledger checkov-ledger.json
@@ -373,9 +374,10 @@ def classify_resource_address(
         return result
 
     if "[" in resource or "]" in resource:
-        # Checkov 3.3.8 renders `count`/`for_each` instances as
+        # Checkov renders `count`/`for_each` instances as
         # `<type>.<name>[0]`, `<type>.<name>["key"]` and
-        # `module.<block>[0].<type>.<name>` (fresh-session review, PR #493).
+        # `module.<block>[0].<type>.<name>` (3.3.8: fresh-session review, PR #493;
+        # re-checked on 3.3.22).
         # Without this branch each fell through to a message blaming a typo
         # or a rename; checked first because a `for_each` key may itself
         # contain dots, which would otherwise mis-count the segments below.
@@ -875,7 +877,7 @@ def evaluate(
     # `isinstance(declared_skipped, int)` -- an ABSENT key silently skipped
     # the whole skip-reconciliation block rather than failing the scan
     # (/critic-gate finding, PR #490 architect review 6a). Real Checkov
-    # 3.3.8 always emits it; required here, alongside the other three, for
+    # 3.3.22 always emits it; required here, alongside the other three, for
     # the same reason those are: an unreadable summary is an unreadable
     # scan, never a clean one.
     skipped = summary.get("skipped")
@@ -1134,7 +1136,7 @@ CHECKOV_SCAN_TIMEOUT_SECONDS = 600
 
 # Environment variables Checkov reads as silent, un-audited equivalents of
 # CLI flags (checkov/common/util/ext_argument_parser.py and env_vars_config.py,
-# 3.3.8) -- most are already caught by this evaluator some other way
+# 3.3.8, re-checked on 3.3.22) -- most are already caught by this evaluator some other way
 # (CKV_CHECK/CKV_FRAMEWORK would show up as a coverage or version-shaped
 # drift), but CKV_SKIP_CHECK is not: it narrows the scan exactly like
 # `--skip-check`, with nothing in `failed_checks` OR `skipped_checks` to
@@ -1409,7 +1411,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     # Cheapest and most load-bearing guard first, before the ledger is even
     # read: every location CHECKOV ITSELF auto-discovers a config from
     # (--directory, cwd, $HOME -- verified against
-    # checkov/common/util/config_utils.py, 3.3.8), for both spellings, with
+    # checkov/common/util/config_utils.py, 3.3.8; re-checked on 3.3.22), for both spellings, with
     # no CLI flag able to override or disable that discovery. A skip-path/
     # skip-check entry there would silently narrow this scan behind both
     # this job's and any sibling scan's back. This needs a deliberate
