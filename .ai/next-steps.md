@@ -1,27 +1,27 @@
-# Next steps — cursor (2026-10-02, Sprint 1 implementing)
+# Next steps — cursor (2026-10-02, Sprint 1 done)
 
-**Now:** **Sprint 1**, `sprint_status: **implementing**`. Milestone #1, "Sprint 1: test
-hermeticity and dependency bump"; build order #6 (done, in review) then #3.
+**Now:** **Sprint 1**, `sprint_status: **done**`. Milestone #1, "Sprint 1: test hermeticity
+and dependency bump": both tasks merged, both issues closed.
 
 **Just done:**
-- Task #6: bumped Checkov 3.3.8 → 3.3.22 and bc-detect-secrets 1.5.47 → 1.5.52, claims
-  re-checked against a real 3.3.22 install. Open as PR #9 (`2a77bf8`), not yet merged.
-- `/way-of-working:critic-gate` on that diff: docs-consistency + architect, 3 rounds,
-  converged (round 3 tightenings only); no second-opinion round (`second_opinion` is null).
-- Untracked and gitignored `.ai/state.json` (PR #8); merged the Sprint 1 anchor sync (PR #7).
-- Plan anchor re-verified (`match`) and re-pointed at task #3.
+- Task #6 (PR #9): Checkov 3.3.8 → 3.3.22 and bc-detect-secrets 1.5.47 → 1.5.52.
+  `/way-of-working:critic-gate`: docs-consistency + architect, 3 rounds, converged.
+- Task #3 (PR #11): fixture commits pin `commit.gpgsign=false`. `/way-of-working:critic-gate`:
+  architect + docs-consistency, 1 round, no defects, converged.
+- Hermetically verified only: the suite ran in WSL; no live consumer run of the action is claimed.
+- Cursor at `351ef7a` (`main`).
 
 ---
 
-**Next:** task #3 — make `test_checkov_ledger.py`'s fixture commits hermetic against the
-caller's `commit.gpgsign` (force it off inside the suite, per #3's acceptance list), keep
-the suite green, add a CHANGELOG entry, then run `/way-of-working:critic-gate` and
-`/way-of-working:ship`. Cut its branch from `main`; #9 need not merge first.
+**Next:** release v0.1.2 — the owner's decision, not an unattended step. Rename
+`CHANGELOG.md`'s "Unreleased (v0.1.2)" to "v0.1.2 -- <date>" in a small PR, merge it, then
+the owner places a signed annotated tag on `main`'s tip (tags go only on the first-parent
+line). Then `/way-of-working:archive-sprint` for Sprint 1.
 
-**Model:** **sonnet** (`coder`), from `models.coder`.
+**Model:** **sonnet** (`coder`), from `models.coder`; the release steps are mechanical.
 
-**HITL Gate:** NONE OPEN. The release (v0.1.2, bundling #6 and #3, due 2026-10-16) is a
-separate human decision once both merge.
+**HITL Gate:** OPEN. The owner decides whether and when to release v0.1.2 (milestone due
+2026-10-16) and signs the tag.
 
 **Pointers:** `docs/roadmap.md` · sprint milestone:
 https://github.com/603-Identity/checkov-ledger-action/milestone/1
