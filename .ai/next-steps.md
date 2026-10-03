@@ -5,7 +5,8 @@
 **Just done:**
 - Adopted the way-of-working plugin at v0.15.0: `.claude/settings.json`,
   `.ai/project.yml` (`planning.kind: github_milestones`, `backlog.kind: github_issues`),
-  and `docs/roadmap.md` as the roadmap, decisions log and threat model.
+  `docs/roadmap.md` as the roadmap and decisions log, and
+  `docs/threat_model.md`, linked from the README.
 
 **Milestone close:** no milestone to close (first sprint in this repo).
 
