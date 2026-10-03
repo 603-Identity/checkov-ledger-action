@@ -6,7 +6,8 @@ pin helpers verify that the pinned SHA was `main`'s tip at some point and that t
 
 ## Unreleased (v0.1.2)
 
-Dependency bump; no change to the evaluator's behaviour or to `action.yml`.
+Dependency bump and a test-suite fix; no change to the evaluator's behaviour or to
+`action.yml`.
 
 - Checkov 3.3.8 -> 3.3.22. Every live 3.3.8 reference (the example ledger, test
   fixtures, usage example and version claims) moved to 3.3.22; provenance notes keep
@@ -19,6 +20,9 @@ Dependency bump; no change to the evaluator's behaviour or to `action.yml`.
 - bc-detect-secrets 1.5.47 -> 1.5.52 (the version Checkov 3.3.22 requires), in the CI
   pin, the pre-commit comment and `.secrets.baseline`. The regenerated baseline adds
   the `is_baseline_file` filter and has no results.
+- Test suite: the fixture repos' `git commit` calls now pin `commit.gpgsign=false`, so the
+  suite no longer inherits the caller's signing config and no longer fails or blocks on
+  a pinentry timeout when run unattended (#3).
 
 ## v0.1.1 -- 2026-09-15
 

@@ -840,7 +840,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=fixture_root, check=True)
         subprocess.run(["git", "add", "-A"], cwd=fixture_root, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=fixture_root,
             check=True,
         )
@@ -1152,7 +1152,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=shape_root, check=True)
         subprocess.run(["git", "add", "-A"], cwd=shape_root, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=shape_root,
             check=True,
         )
@@ -1360,7 +1360,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=widened_git_root, check=True)
         subprocess.run(["git", "add", "-A"], cwd=widened_git_root, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=widened_git_root,
             check=True,
         )
@@ -1459,7 +1459,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=git_root, check=True)
         subprocess.run(["git", "add", "-A"], cwd=git_root, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=git_root,
             check=True,
         )
@@ -1477,7 +1477,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=empty_git_root, check=True)
         subprocess.run(["git", "add", "-A"], cwd=empty_git_root, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=empty_git_root,
             check=True,
         )
@@ -1525,7 +1525,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=badenc_root, check=True)
         subprocess.run(["git", "add", "-A"], cwd=badenc_root, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=badenc_root,
             check=True,
         )
@@ -1608,7 +1608,7 @@ def main() -> int:
         subprocess.run(["git", "init", "-q"], cwd=stub_repo, check=True)
         subprocess.run(["git", "add", "-A"], cwd=stub_repo, check=True)
         subprocess.run(
-            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "commit", "-q", "-m", "fixture"],
+            ["git", "-c", "user.email=test@example.com", "-c", "user.name=test", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "fixture"],
             cwd=stub_repo,
             check=True,
         )
