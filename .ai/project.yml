@@ -51,12 +51,11 @@ code_paths:
 # ── the local green gate ─────────────────────────────────────────────────────
 # Mirrors the two CI jobs in .github/workflows/pull-request.yml. Needs a POSIX
 # host (WSL, a container, CI): the suite puts a stub `checkov` on PATH, which
-# native Windows does not resolve. commit.gpgsign is forced off for the suite's
-# own fixture commits until #3 is fixed, or it blocks on pinentry.
+# native Windows does not resolve.
 gates:
   green:
     - { run: "git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline" }
-    - { run: "GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=commit.gpgsign GIT_CONFIG_VALUE_0=false PYTHONDONTWRITEBYTECODE=1 python3 test_checkov_ledger.py" }
+    - { run: "PYTHONDONTWRITEBYTECODE=1 python3 test_checkov_ledger.py" }
 
 # ── branch protection ────────────────────────────────────────────────────────
 # Matches the live ruleset (id 23308930). It carries no deletion or
